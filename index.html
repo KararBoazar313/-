@@ -27,9 +27,50 @@ main{position:relative;z-index:1}.page{min-height:100svh;display:none;align-item
 #toast{position:fixed;z-index:30;bottom:85px;left:50%;transform:translateX(-50%);background:#332138;border:1px solid var(--gold);border-radius:30px;padding:10px 18px;opacity:0;transition:.3s;pointer-events:none;text-align:center}#toast.show{opacity:1}
 @media(max-width:520px){header{padding:10px 15px}.brand{font-size:18px}.card{padding:27px 19px}.giftgrid{gap:8px}.gift{font-size:34px;padding:15px 5px}.memory{min-height:95px}.letter{font-size:18px;padding:18px}}
 @media(prefers-reduced-motion:reduce){*,*:before,*:after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+
+/* Thuluth-first typography: uses the bundled font when present, then elegant Arabic fallbacks. */
+@font-face{font-family:'ThuluthLocal';src:url('assets/DimaThuluth2.ttf') format('truetype');font-display:swap}
+body,.btn,.option,.music,.small,.copy,.eyebrow,.gate-btn{font-family:'ThuluthLocal','Amiri',serif}
+.title,.subtitle,.brand,.letter,.gate-title,.gate-subtitle{font-family:'ThuluthLocal','Amiri',serif}
+#loveGate{position:fixed;inset:0;z-index:1000;display:flex;align-items:center;justify-content:center;padding:20px;background:radial-gradient(ellipse at 20% 10%,#482440 0,transparent 42%),radial-gradient(ellipse at 85% 85%,#34264f 0,transparent 40%),#100d19}
+.gate-card{width:min(680px,100%);min-height:420px;padding:clamp(28px,6vw,58px) 22px;border:1px solid #c79d5c88;border-radius:30px;background:linear-gradient(145deg,#38243aef,#171321f5 65%,#392036ef);box-shadow:0 20px 80px #0009,inset 0 0 35px #e5bd6920;text-align:center;display:flex;flex-direction:column;align-items:center;justify-content:center;overflow:hidden;position:relative}
+.gate-card:before{content:"";position:absolute;inset:9px;border:1px solid #e8c47a38;border-radius:23px;pointer-events:none}
+.gate-kicker{color:#eaa0b2;font-size:clamp(17px,3vw,21px);position:relative}
+.gate-title{font-size:clamp(38px,8vw,62px);line-height:1.55;color:#e8c47a;text-shadow:0 0 22px #e6ad5c65;margin:14px 0 4px;position:relative}
+.gate-subtitle{font-size:clamp(22px,4vw,29px);color:#fff1df;margin:0 0 24px;position:relative}
+.gate-actions{position:relative;width:min(440px,100%);height:150px}
+.gate-btn{position:absolute;min-width:150px;border:1px solid #e8c47a;border-radius:50px;padding:13px 18px;background:linear-gradient(120deg,#9d6844,#3b2635 55%,#80543f);color:#fff4df;font-size:clamp(16px,3vw,20px);cursor:pointer;box-shadow:0 0 20px #d5a75c33;transition:left .2s ease,top .2s ease}
+#yesBtn{left:calc(50% - 160px);top:8px}
+#noBtn{left:calc(50% + 10px);top:8px;background:#211a2b;border-color:#a77d85}
+.gate-note{position:relative;color:#d7bfc5;font-size:15px;margin-top:0}
+body.gate-open header,body.gate-open .nav,body.gate-open #progress{display:none}
+.gallery{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;max-width:680px;margin:24px auto}
+.gallery figure{margin:0;border:1px solid #d5b07899;border-radius:17px;padding:7px;background:#ffffff0b;overflow:hidden;box-shadow:0 10px 28px #0005}
+.gallery img{display:block;width:100%;height:auto;max-height:430px;object-fit:contain;border-radius:11px}
+.gallery figcaption{font-size:14px;color:#f5dfd5;padding:8px 3px 3px}
+.pdf-card{display:block;max-width:430px;margin:25px auto 5px;padding:22px 18px;border:1px solid #e8c47a;border-radius:22px;background:linear-gradient(145deg,#4a2d43,#211829);color:#fff1df;text-decoration:none;box-shadow:0 12px 35px #0007;transition:.25s}
+.pdf-card:hover{transform:translateY(-4px);box-shadow:0 15px 38px #0009}
+.pdf-icon{font-size:42px;display:block;margin-bottom:8px;color:#e8c47a}
+.pdf-label{font-size:clamp(23px,4vw,30px);color:#e8c47a}
+@media(max-width:520px){.gate-card{min-height:390px;padding:30px 14px}.gate-btn{min-width:138px;padding:12px 12px}#yesBtn{left:calc(50% - 148px)}#noBtn{left:calc(50% + 8px)}.gallery{gap:8px}.gallery figure{padding:5px}.gallery figcaption{font-size:12px}}
+
 </style>
 </head>
-<body>
+<body class="gate-open">
+
+<div id="loveGate">
+ <div class="gate-card">
+  <div class="gate-kicker">قبل لا ندخل للموقع…</div>
+  <div class="gate-title">انتي تحبين كرار؟</div>
+  <p class="gate-subtitle">جاوبيني بصراحة يا حنين ♡</p>
+  <div class="gate-actions" id="gateActions">
+   <button class="gate-btn" id="yesBtn" type="button">اي احب كرار</button>
+   <button class="gate-btn" id="noBtn" type="button">لا</button>
+  </div>
+  <div class="gate-note" id="gateNote">اختاري جوابج حتى نكمل المفاجأة ✨</div>
+ </div>
+</div>
+
 <div class="progress" id="progress"></div><div id="particles"></div>
 <header><div class="brand">كرار ♡ حنين</div><button class="music" id="musicBtn" onclick="toggleMusic()">♫ تشغيل الموسيقى</button></header>
 <main>
@@ -44,7 +85,7 @@ main{position:relative;z-index:1}.page{min-height:100svh;display:none;align-item
 <section class="page" data-title="سؤال"><div class="card"><div class="eyebrow">لحظة تفاعلية</div><div class="title">اختاري العبارة الأقرب لقلبج</div><p class="copy">شنو تحبين تسمعين بهاليوم؟</p><div class="options" id="loveOptions"><button class="option" onclick="choose(this)">أحبج مثل ما إنتِ ♡</button><button class="option" onclick="choose(this)">أتمنى لج فرح ما ينتهي ✨</button><button class="option" onclick="choose(this)">كل سنة وإنتِ أجمل حكاية 🌹</button></div><div class="btnrow"><button class="btn" onclick="go(5)">التالي</button></div></div></section>
 <section class="page" data-title="الكعكة"><div class="card"><div class="eyebrow">لحظة عيد الميلاد</div><div class="title">اطفي الشموع وتمنّي</div><div class="cake">🎂</div><p class="subtitle">كل عام وانتي بخير يا حنين</p><p class="copy">أتمنى هالسنة تحمل لج أبواب خير وفرص جميلة وأيام تضحكين بيها من قلبج.</p><div class="btnrow"><button class="btn" onclick="celebrate()">🎉 احتفلي!</button><button class="btn secondary" onclick="go(6)">افتحي الهدايا</button></div></div></section>
 <section class="page" data-title="الهدايا"><div class="card"><div class="eyebrow">اختاري صندوقج</div><div class="title">ثلاث هدايا صغيرة</div><p class="copy">كل صندوق يخبي كلمة حلوة… افتحيها وحدة وحدة.</p><div class="giftgrid"><button class="gift" onclick="openGift(0)">🎁<span>الأولى</span></button><button class="gift" onclick="openGift(1)">🎀<span>الثانية</span></button><button class="gift" onclick="openGift(2)">💝<span>الثالثة</span></button></div><div class="small" id="giftText">اضغطي على أي صندوق حتى تنفتح هديته.</div><div class="btnrow"><button class="btn" onclick="go(7)">للذكريات</button></div></div></section>
-<section class="page" data-title="الذكريات"><div class="card"><div class="eyebrow">مساحة لذكرياتكم</div><div class="title">ذكرياتنا الحلوة</div><p class="copy">هنا تكدر تضيف صوركم الحقيقية لاحقاً. خليت لج أماكن جاهزة حتى تبقى الذكريات جزء من الموقع.</p><div class="memorygrid"><div class="memory">🌅<small>لحظة حلوة</small></div><div class="memory">🌹<small>ذكرى مميزة</small></div><div class="memory">🌙<small>ليلة ما تنسى</small></div></div><div class="btnrow"><button class="btn" onclick="go(8)">كمّلي</button></div></div></section>
+<section class="page" data-title="الذكريات"><div class="card"><div class="eyebrow">مساحة لذكرياتكم</div><div class="title">ذكرياتنا الحلوة</div><p class="copy">جمعت لج الصور اللي اخترتها حتى تبقى هاللحظات محفوظة بهالرحلة. ♡</p><div class="gallery"><figure><img loading="lazy" src="assets/IMG_20261101_201025_645.jpg" alt="ذكرى من صور حنين وكرار 1"><figcaption>ذكرى جميلة ♡</figcaption></figure><figure><img loading="lazy" src="assets/IMG_20261101_201029_864.jpg" alt="ذكرى من صور حنين وكرار 2"><figcaption>ذكرى جميلة ♡</figcaption></figure><figure><img loading="lazy" src="assets/IMG_20261101_201039_853.jpg" alt="ذكرى من صور حنين وكرار 3"><figcaption>ذكرى جميلة ♡</figcaption></figure><figure><img loading="lazy" src="assets/IMG_20261101_201050_140.jpg" alt="ذكرى من صور حنين وكرار 4"><figcaption>ذكرى جميلة ♡</figcaption></figure><figure><img loading="lazy" src="assets/IMG_20261101_201104_686.jpg" alt="ذكرى من صور حنين وكرار 5"><figcaption>ذكرى جميلة ♡</figcaption></figure><figure><img loading="lazy" src="assets/IMG_20261101_201111_714.jpg" alt="ذكرى من صور حنين وكرار 6"><figcaption>ذكرى جميلة ♡</figcaption></figure><figure><img loading="lazy" src="assets/IMG_20261101_201124_982.jpg" alt="ذكرى من صور حنين وكرار 7"><figcaption>ذكرى جميلة ♡</figcaption></figure><figure><img loading="lazy" src="assets/IMG_20261101_201130_584.jpg" alt="ذكرى من صور حنين وكرار 8"><figcaption>ذكرى جميلة ♡</figcaption></figure><figure><img loading="lazy" src="assets/IMG_20261101_201146_343.jpg" alt="ذكرى من صور حنين وكرار 9"><figcaption>ذكرى جميلة ♡</figcaption></figure><figure><img loading="lazy" src="assets/IMG_20261101_201158_621.jpg" alt="ذكرى من صور حنين وكرار 10"><figcaption>ذكرى جميلة ♡</figcaption></figure><figure><img loading="lazy" src="assets/IMG_20261101_201305_051.jpg" alt="ذكرى من صور حنين وكرار 11"><figcaption>ذكرى جميلة ♡</figcaption></figure></div><div class="btnrow"><button class="btn" onclick="go(8)">كمّلي</button></div></div></section>
 <section class="page" data-title="أمنيات"><div class="card"><div class="eyebrow">أمنيات كرار إلج</div><div class="title">أتمنى لج…</div><div class="options"><div class="option">راحة بال دائمة 🕊️</div><div class="option">نجاح يفرح قلبج 🌟</div><div class="option">ضحكة ما تغيب 🌷</div><div class="option">أيام تشبه أحلامج 💫</div></div><p class="subtitle">وكل سنة تكون أحلى من اللي قبلها.</p><div class="btnrow"><button class="btn" onclick="go(9)">افتحي رسالتج</button></div></div></section>
 <section class="page" data-title="الرسالة"><div class="card"><div class="eyebrow">من حبيبج كرار إلى حنين</div><div class="title">رسالة إلكِ</div><div class="letter">حنين…
 
@@ -59,10 +100,51 @@ main{position:relative;z-index:1}.page{min-height:100svh;display:none;align-item
 عيد ميلاد سعيد يا حنين…
 من حبيبج كرار إلى حنين ♡</div><div class="btnrow"><button class="btn" onclick="go(10)">إلى آخر مفاجأة</button></div><div class="small">هذه رسالة أولية داخل الموقع؛ يمكن استبدالها بنص رسالتك الطويلة الأصلية.</div></div></section>
 <section class="page" data-title="النهاية"><div class="card"><div class="eyebrow">وصلنا لنهاية الرحلة</div><div class="ornament">✧ ♡ ✧</div><span class="heart">∞</span><div class="title">كرار يحبج حنين</div><p class="subtitle">كل عام وانتي بخير، وكل عام وأحلامج أقرب، وفرحتج أكبر.</p><div class="ornament">🌹 ✨ 🌹</div><p class="copy">هاي الرحلة خلصت… بس الأمنيات الحلوة إلج ما تخلص.</p><div class="btnrow"><button class="btn" onclick="go(0)">إعادة الرحلة من البداية ↺</button></div></div></section>
+
+<section class="page" data-title="رسالة أخيرة"><div class="card">
+ <div class="eyebrow">آخر هدية من كرار إلى حنين</div>
+ <div class="title">كلمة أخيرة…</div>
+ <p class="subtitle">انتي رزق من الله و اشكر و احمد ربي على هذا الرزق و اعذريني على التقصير تستاهلين افديلچ روحي</p>
+ <a class="pdf-card" href="assets/رســالــة2♡.pdf" target="_blank" rel="noopener">
+  <span class="pdf-icon">♡</span><span class="pdf-label">فتح الرسالة</span>
+  <span class="small" style="display:block">اضغطي هنا لقراءة رسالتج كاملة</span>
+ </a>
+ <div class="btnrow"><button class="btn" onclick="go(0)">إعادة الرحلة من البداية ↺</button></div>
+</div></section>
+
 </main>
 <div class="nav"><button class="btn secondary" id="prev" onclick="step(-1)">السابق</button><button class="btn" id="next" onclick="step(1)">التالي</button></div>
 <div id="toast"></div>
 <script>
+
+const loveGate=document.getElementById('loveGate');
+const yesBtn=document.getElementById('yesBtn'), noBtn=document.getElementById('noBtn');
+const gateActions=document.getElementById('gateActions'), gateNote=document.getElementById('gateNote');
+const loveWords=['اي احب كرار','اعشق كرار','اموت على كرار','اتنفس كرار','ادمن كرار','متيمة بكرار','ولهانة بكرار','اهيم بكرار'];
+let loveIndex=0;
+function moveNo(){
+ const a=gateActions.getBoundingClientRect(), b=noBtn.getBoundingClientRect();
+ const x=Math.max(0,Math.random()*(a.width-b.width));
+ const y=Math.max(0,Math.random()*(a.height-b.height));
+ noBtn.style.left=x+'px'; noBtn.style.top=y+'px';
+}
+noBtn.addEventListener('pointerenter',moveNo);
+noBtn.addEventListener('touchstart',moveNo,{passive:true});
+noBtn.addEventListener('click',e=>{e.preventDefault();moveNo()});
+yesBtn.addEventListener('click',()=>{
+ if(loveIndex<loveWords.length-1){
+  loveIndex++; yesBtn.textContent=loveWords[loveIndex];
+  gateNote.textContent='وبعد؟ كمّلي يا حنين ♡'; moveNo();
+ }else{
+  yesBtn.textContent='♡'; gateNote.textContent='يلا نبدأ المفاجأة يا حنين ♡';
+  yesBtn.disabled=true;
+  setTimeout(()=>{
+   loveGate.style.transition='opacity .65s ease'; loveGate.style.opacity='0';
+   setTimeout(()=>{loveGate.remove();document.body.classList.remove('gate-open');show(0)},680);
+  },450);
+ }
+});
+
 const pages=[...document.querySelectorAll('.page')];let current=0;let audioCtx=null,oscillators=[],musicOn=false;
 function show(i){current=Math.max(0,Math.min(pages.length-1,i));pages.forEach((p,n)=>p.classList.toggle('active',n===current));document.getElementById('progress').style.width=((current+1)/pages.length*100)+'%';document.getElementById('prev').style.visibility=current===0?'hidden':'visible';document.getElementById('next').style.visibility=current===pages.length-1?'hidden':'visible';window.scrollTo({top:0,behavior:'smooth'});if(current===5)confetti(14)}
 function go(i){show(i)}function step(d){show(current+d)}
