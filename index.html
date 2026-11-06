@@ -40,8 +40,8 @@ body,.btn,.option,.music,.small,.copy,.eyebrow,.gate-btn{font-family:'ThuluthLoc
 .gate-subtitle{font-size:clamp(22px,4vw,29px);color:#fff1df;margin:0 0 24px;position:relative}
 .gate-actions{position:relative;width:min(440px,100%);height:150px}
 .gate-btn{position:absolute;min-width:150px;border:1px solid #e8c47a;border-radius:50px;padding:13px 18px;background:linear-gradient(120deg,#9d6844,#3b2635 55%,#80543f);color:#fff4df;font-size:clamp(16px,3vw,20px);cursor:pointer;box-shadow:0 0 20px #d5a75c33;transition:left .2s ease,top .2s ease}
-#yesBtn{left:calc(50% - 160px);top:8px}
-#noBtn{left:calc(50% + 10px);top:8px;background:#211a2b;border-color:#a77d85}
+#yesBtn{left:0;top:8px}
+#noBtn{right:0;left:auto;top:8px;background:#211a2b;border-color:#a77d85}
 .gate-note{position:relative;color:#d7bfc5;font-size:15px;margin-top:0}
 body.gate-open header,body.gate-open .nav,body.gate-open #progress{display:none}
 .gallery{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;max-width:680px;margin:24px auto}
@@ -52,7 +52,19 @@ body.gate-open header,body.gate-open .nav,body.gate-open #progress{display:none}
 .pdf-card:hover{transform:translateY(-4px);box-shadow:0 15px 38px #0009}
 .pdf-icon{font-size:42px;display:block;margin-bottom:8px;color:#e8c47a}
 .pdf-label{font-size:clamp(23px,4vw,30px);color:#e8c47a}
-@media(max-width:520px){.gate-card{min-height:390px;padding:30px 14px}.gate-btn{min-width:138px;padding:12px 12px}#yesBtn{left:calc(50% - 148px)}#noBtn{left:calc(50% + 8px)}.gallery{gap:8px}.gallery figure{padding:5px}.gallery figcaption{font-size:12px}}
+@media(max-width:520px){.gate-card{min-height:390px;padding:30px 14px}.gate-actions{width:100%;height:190px}.gate-btn{min-width:128px;padding:12px 10px;font-size:15px}#yesBtn{left:0;top:8px}#noBtn{right:0;left:auto;top:8px}.gallery{gap:8px}.gallery figure{padding:5px}.gallery figcaption{font-size:12px}}
+
+
+#imageLightbox{position:fixed;inset:0;z-index:9999;display:none;align-items:center;justify-content:center;padding:18px;background:rgba(12,8,16,.78);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
+#imageLightbox.open{display:flex}
+#imageLightbox .lightbox-panel{position:relative;width:min(960px,100%);height:min(88vh,900px);display:flex;align-items:center;justify-content:center}
+#imageLightbox img{max-width:100%;max-height:100%;width:auto;height:auto;object-fit:contain;border-radius:14px;box-shadow:0 18px 65px #000b}
+#imageLightbox button{position:absolute;z-index:2;border:1px solid #e8c47a88;background:#241a2cdd;color:#fff2dc;border-radius:50%;width:46px;height:46px;font-size:25px;cursor:pointer;display:grid;place-items:center}
+#lightboxClose{top:4px;right:4px}
+#lightboxPrev{left:4px;top:50%;transform:translateY(-50%)}
+#lightboxNext{right:4px;top:50%;transform:translateY(-50%)}
+#lightboxCaption{position:absolute;bottom:-28px;left:0;right:0;text-align:center;color:#f5dfd5;font-size:14px}
+@media(max-width:520px){#imageLightbox{padding:10px}#imageLightbox .lightbox-panel{height:84vh}#imageLightbox button{width:42px;height:42px}}
 
 </style>
 </head>
@@ -85,7 +97,7 @@ body.gate-open header,body.gate-open .nav,body.gate-open #progress{display:none}
 <section class="page" data-title="سؤال"><div class="card"><div class="eyebrow">لحظة تفاعلية</div><div class="title">اختاري العبارة الأقرب لقلبج</div><p class="copy">شنو تحبين تسمعين بهاليوم؟</p><div class="options" id="loveOptions"><button class="option" onclick="choose(this)">أحبج مثل ما إنتِ ♡</button><button class="option" onclick="choose(this)">أتمنى لج فرح ما ينتهي ✨</button><button class="option" onclick="choose(this)">كل سنة وإنتِ أجمل حكاية 🌹</button></div><div class="btnrow"><button class="btn" onclick="go(5)">التالي</button></div></div></section>
 <section class="page" data-title="الكعكة"><div class="card"><div class="eyebrow">لحظة عيد الميلاد</div><div class="title">اطفي الشموع وتمنّي</div><div class="cake">🎂</div><p class="subtitle">كل عام وانتي بخير يا حنين</p><p class="copy">أتمنى هالسنة تحمل لج أبواب خير وفرص جميلة وأيام تضحكين بيها من قلبج.</p><div class="btnrow"><button class="btn" onclick="celebrate()">🎉 احتفلي!</button><button class="btn secondary" onclick="go(6)">افتحي الهدايا</button></div></div></section>
 <section class="page" data-title="الهدايا"><div class="card"><div class="eyebrow">اختاري صندوقج</div><div class="title">ثلاث هدايا صغيرة</div><p class="copy">كل صندوق يخبي كلمة حلوة… افتحيها وحدة وحدة.</p><div class="giftgrid"><button class="gift" onclick="openGift(0)">🎁<span>الأولى</span></button><button class="gift" onclick="openGift(1)">🎀<span>الثانية</span></button><button class="gift" onclick="openGift(2)">💝<span>الثالثة</span></button></div><div class="small" id="giftText">اضغطي على أي صندوق حتى تنفتح هديته.</div><div class="btnrow"><button class="btn" onclick="go(7)">للذكريات</button></div></div></section>
-<section class="page" data-title="الذكريات"><div class="card"><div class="eyebrow">مساحة لذكرياتكم</div><div class="title">ذكرياتنا الحلوة</div><p class="copy">جمعت لج الصور اللي اخترتها حتى تبقى هاللحظات محفوظة بهالرحلة. ♡</p><div class="gallery"><figure><img loading="lazy" src="assets/IMG_20261101_201025_645.jpg" alt="ذكرى من صور حنين وكرار 1"><figcaption>ذكرى جميلة ♡</figcaption></figure><figure><img loading="lazy" src="assets/IMG_20261101_201029_864.jpg" alt="ذكرى من صور حنين وكرار 2"><figcaption>ذكرى جميلة ♡</figcaption></figure><figure><img loading="lazy" src="assets/IMG_20261101_201039_853.jpg" alt="ذكرى من صور حنين وكرار 3"><figcaption>ذكرى جميلة ♡</figcaption></figure><figure><img loading="lazy" src="assets/IMG_20261101_201050_140.jpg" alt="ذكرى من صور حنين وكرار 4"><figcaption>ذكرى جميلة ♡</figcaption></figure><figure><img loading="lazy" src="assets/IMG_20261101_201104_686.jpg" alt="ذكرى من صور حنين وكرار 5"><figcaption>ذكرى جميلة ♡</figcaption></figure><figure><img loading="lazy" src="assets/IMG_20261101_201111_714.jpg" alt="ذكرى من صور حنين وكرار 6"><figcaption>ذكرى جميلة ♡</figcaption></figure><figure><img loading="lazy" src="assets/IMG_20261101_201124_982.jpg" alt="ذكرى من صور حنين وكرار 7"><figcaption>ذكرى جميلة ♡</figcaption></figure><figure><img loading="lazy" src="assets/IMG_20261101_201130_584.jpg" alt="ذكرى من صور حنين وكرار 8"><figcaption>ذكرى جميلة ♡</figcaption></figure><figure><img loading="lazy" src="assets/IMG_20261101_201146_343.jpg" alt="ذكرى من صور حنين وكرار 9"><figcaption>ذكرى جميلة ♡</figcaption></figure><figure><img loading="lazy" src="assets/IMG_20261101_201158_621.jpg" alt="ذكرى من صور حنين وكرار 10"><figcaption>ذكرى جميلة ♡</figcaption></figure><figure><img loading="lazy" src="assets/IMG_20261101_201305_051.jpg" alt="ذكرى من صور حنين وكرار 11"><figcaption>ذكرى جميلة ♡</figcaption></figure></div><div class="btnrow"><button class="btn" onclick="go(8)">كمّلي</button></div></div></section>
+<section class="page" data-title="الذكريات"><div class="card"><div class="eyebrow">مساحة لذكرياتكم</div><div class="title">ذكرياتنا الحلوة</div><p class="copy">جمعت لج الصور اللي اخترتها حتى تبقى هاللحظات محفوظة بهالرحلة. ♡</p><div class="gallery"><figure><img loading="eager" src="./assets/IMG_20261101_201025_645.jpg" alt="ذكرى من صور حنين وكرار 1"><figcaption>ذكرى جميلة ♡</figcaption></figure><figure><img loading="eager" src="./assets/IMG_20261101_201029_864.jpg" alt="ذكرى من صور حنين وكرار 2"><figcaption>ذكرى جميلة ♡</figcaption></figure><figure><img loading="eager" src="./assets/IMG_20261101_201039_853.jpg" alt="ذكرى من صور حنين وكرار 3"><figcaption>ذكرى جميلة ♡</figcaption></figure><figure><img loading="eager" src="./assets/IMG_20261101_201050_140.jpg" alt="ذكرى من صور حنين وكرار 4"><figcaption>ذكرى جميلة ♡</figcaption></figure><figure><img loading="eager" src="./assets/IMG_20261101_201104_686.jpg" alt="ذكرى من صور حنين وكرار 5"><figcaption>ذكرى جميلة ♡</figcaption></figure><figure><img loading="eager" src="./assets/IMG_20261101_201111_714.jpg" alt="ذكرى من صور حنين وكرار 6"><figcaption>ذكرى جميلة ♡</figcaption></figure><figure><img loading="eager" src="./assets/IMG_20261101_201124_982.jpg" alt="ذكرى من صور حنين وكرار 7"><figcaption>ذكرى جميلة ♡</figcaption></figure><figure><img loading="eager" src="./assets/IMG_20261101_201130_584.jpg" alt="ذكرى من صور حنين وكرار 8"><figcaption>ذكرى جميلة ♡</figcaption></figure><figure><img loading="eager" src="./assets/IMG_20261101_201146_343.jpg" alt="ذكرى من صور حنين وكرار 9"><figcaption>ذكرى جميلة ♡</figcaption></figure><figure><img loading="eager" src="./assets/IMG_20261101_201158_621.jpg" alt="ذكرى من صور حنين وكرار 10"><figcaption>ذكرى جميلة ♡</figcaption></figure><figure><img loading="eager" src="./assets/IMG_20261101_201305_051.jpg" alt="ذكرى من صور حنين وكرار 11"><figcaption>ذكرى جميلة ♡</figcaption></figure></div><div class="btnrow"><button class="btn" onclick="go(8)">كمّلي</button></div></div></section>
 <section class="page" data-title="أمنيات"><div class="card"><div class="eyebrow">أمنيات كرار إلج</div><div class="title">أتمنى لج…</div><div class="options"><div class="option">راحة بال دائمة 🕊️</div><div class="option">نجاح يفرح قلبج 🌟</div><div class="option">ضحكة ما تغيب 🌷</div><div class="option">أيام تشبه أحلامج 💫</div></div><p class="subtitle">وكل سنة تكون أحلى من اللي قبلها.</p><div class="btnrow"><button class="btn" onclick="go(9)">افتحي رسالتج</button></div></div></section>
 <section class="page" data-title="الرسالة"><div class="card"><div class="eyebrow">من حبيبج كرار إلى حنين</div><div class="title">رسالة إلكِ</div><div class="letter">حنين…
 
@@ -105,9 +117,9 @@ body.gate-open header,body.gate-open .nav,body.gate-open #progress{display:none}
  <div class="eyebrow">آخر هدية من كرار إلى حنين</div>
  <div class="title">كلمة أخيرة…</div>
  <p class="subtitle">انتي رزق من الله و اشكر و احمد ربي على هذا الرزق و اعذريني على التقصير تستاهلين افديلچ روحي</p>
- <a class="pdf-card" href="assets/رســالــة2♡.pdf" target="_blank" rel="noopener">
-  <span class="pdf-icon">♡</span><span class="pdf-label">فتح الرسالة</span>
-  <span class="small" style="display:block">اضغطي هنا لقراءة رسالتج كاملة</span>
+ <a class="pdf-card" href="./assets/رســالــة2♡.pdf" download="رســالــة2♡.pdf">
+  <span class="pdf-icon">♡</span><span class="pdf-label">تحميل الرسالة</span>
+  <span class="small" style="display:block">اضغطي هنا حتى تتحمّل الرسالة على جهازج وتفتحينها من ملفاتج</span>
  </a>
  <div class="btnrow"><button class="btn" onclick="go(0)">إعادة الرحلة من البداية ↺</button></div>
 </div></section>
@@ -115,7 +127,65 @@ body.gate-open header,body.gate-open .nav,body.gate-open #progress{display:none}
 </main>
 <div class="nav"><button class="btn secondary" id="prev" onclick="step(-1)">السابق</button><button class="btn" id="next" onclick="step(1)">التالي</button></div>
 <div id="toast"></div>
+
+<div id="imageLightbox" aria-hidden="true">
+ <div class="lightbox-panel">
+  <button type="button" id="lightboxClose" aria-label="إغلاق">×</button>
+  <button type="button" id="lightboxPrev" aria-label="الصورة السابقة">‹</button>
+  <img id="lightboxImage" alt="صورة مكبرة">
+  <button type="button" id="lightboxNext" aria-label="الصورة التالية">›</button>
+  <div id="lightboxCaption"></div>
+ </div>
+</div>
+
 <script>
+
+
+// معرض الصور المكبّر: تنقّل بالأسهم والسحب على الهاتف.
+(()=>{
+ const box=document.getElementById('imageLightbox');
+ const big=document.getElementById('lightboxImage');
+ const caption=document.getElementById('lightboxCaption');
+ const gallery=[...document.querySelectorAll('.gallery img')];
+ if(!box||!big||!gallery.length)return;
+ let index=0,startX=0;
+ function render(){
+  const item=gallery[index];
+  big.src=item.currentSrc||item.src;
+  big.alt=item.alt||'صورة من الذكريات';
+  caption.textContent=item.closest('figure')?.querySelector('figcaption')?.textContent||'';
+ }
+ function open(i){
+  index=(i+gallery.length)%gallery.length;render();
+  box.classList.add('open');box.setAttribute('aria-hidden','false');
+  document.body.style.overflow='hidden';
+ }
+ function close(){
+  box.classList.remove('open');box.setAttribute('aria-hidden','true');
+  document.body.style.overflow='';
+  big.removeAttribute('src');
+ }
+ function move(d){index=(index+d+gallery.length)%gallery.length;render()}
+ gallery.forEach((img,i)=>{
+  img.style.cursor='zoom-in';
+  img.addEventListener('click',()=>open(i));
+ });
+ document.getElementById('lightboxClose').addEventListener('click',close);
+ document.getElementById('lightboxPrev').addEventListener('click',()=>move(-1));
+ document.getElementById('lightboxNext').addEventListener('click',()=>move(1));
+ box.addEventListener('click',e=>{if(e.target===box)close()});
+ document.addEventListener('keydown',e=>{
+  if(!box.classList.contains('open'))return;
+  if(e.key==='Escape')close();
+  if(e.key==='ArrowLeft')move(1);
+  if(e.key==='ArrowRight')move(-1);
+ });
+ box.addEventListener('touchstart',e=>{startX=e.changedTouches[0].clientX},{passive:true});
+ box.addEventListener('touchend',e=>{
+  const dx=e.changedTouches[0].clientX-startX;
+  if(Math.abs(dx)>45)move(dx<0?1:-1);
+ },{passive:true});
+})();
 
 const loveGate=document.getElementById('loveGate');
 const yesBtn=document.getElementById('yesBtn'), noBtn=document.getElementById('noBtn');
@@ -123,10 +193,22 @@ const gateActions=document.getElementById('gateActions'), gateNote=document.getE
 const loveWords=['اي احب كرار','اعشق كرار','اموت على كرار','اتنفس كرار','ادمن كرار','متيمة بكرار','ولهانة بكرار','اهيم بكرار'];
 let loveIndex=0;
 function moveNo(){
- const a=gateActions.getBoundingClientRect(), b=noBtn.getBoundingClientRect();
- const x=Math.max(0,Math.random()*(a.width-b.width));
- const y=Math.max(0,Math.random()*(a.height-b.height));
- noBtn.style.left=x+'px'; noBtn.style.top=y+'px';
+ const area=gateActions.getBoundingClientRect();
+ const yes=yesBtn.getBoundingClientRect();
+ const w=noBtn.offsetWidth, h=noBtn.offsetHeight;
+ const maxX=Math.max(0,area.width-w), maxY=Math.max(0,area.height-h);
+ const candidates=[
+  {x:maxX,y:0},{x:maxX,y:maxY},{x:0,y:maxY},
+  {x:maxX*.72,y:maxY},{x:maxX,y:maxY*.55},{x:maxX*.45,y:maxY}
+ ];
+ const safe=candidates.filter(p=>{
+  const cx=area.left+p.x+w/2, cy=area.top+p.y+h/2;
+  const yx=yes.left+yes.width/2, yy=yes.top+yes.height/2;
+  return Math.hypot(cx-yx,cy-yy)>Math.min(190,area.width*.48);
+ });
+ const choices=safe.length?safe:candidates;
+ const p=choices[Math.floor(Math.random()*choices.length)];
+ noBtn.style.left=p.x+'px'; noBtn.style.right='auto'; noBtn.style.top=p.y+'px';
 }
 noBtn.addEventListener('pointerenter',moveNo);
 noBtn.addEventListener('touchstart',moveNo,{passive:true});
